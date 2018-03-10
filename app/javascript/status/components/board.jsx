@@ -34,12 +34,20 @@ class Board extends React.Component {
         });
     }
 
+    onUpdateStatus(status) {
+        console.log(status);
+        const new_status = this.state.status.slice();
+        const idx = new_status.map((x)=>{return x.id}).indexOf(status.id);
+        new_status[idx].status = status.status;
+        this.setState({status: new_status});
+    }
+
     componentDidMount () {
         this.fetchStatus();
         this.CableApp.cable.subscriptions.create({channel: "CandidatStatusChannel" , board: 'board_1'}, {
             connect: () => { console.log("connect"); },
-            received: (newLine) => {
-                console.log(newLine)
+            received: (data) => {
+                this.onUpdateStatus(data.status)
             }
         })
     }
@@ -52,8 +60,13 @@ class Board extends React.Component {
                 <button onClick={this.updateStatus.bind(this, x.id, 2)}>Entretiens</button>
             </li>)
         })
-        return <div>
-            <ul>{li}</ul>
+        return <div id="board">
+            <div className="to_meet">
+                <ul>{li}</ul>
+            </div>
+            <div className="meeting">
+                <ul>{li}</ul>
+            </div>
         </div>;
     }
 }
