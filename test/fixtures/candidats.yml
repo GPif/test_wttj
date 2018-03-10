@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  firstaname: MyString
+  firstname: MyString
 
 two:
   name: MyString
-  firstaname: MyString
+  firstname: MyString
