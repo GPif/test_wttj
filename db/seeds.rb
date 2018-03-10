@@ -5,3 +5,11 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+Candidat.delete_all
+CandidatStatus.delete_all
+
+c=Candidat.create(name: 'John', firstname: 'Do')
+s=CandidatStatus.new(status: CandidatStatus::TO_MEET)
+s.candidat = c
+s.save
