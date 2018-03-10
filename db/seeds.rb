@@ -9,7 +9,22 @@
 Candidat.delete_all
 CandidatStatus.delete_all
 
-c=Candidat.create(name: 'John', firstname: 'Do')
+c=Candidat.create(name: 'Rose', firstname: 'Axl')
+s=CandidatStatus.new(status: CandidatStatus::TO_MEET)
+s.candidat = c
+s.save
+
+c=Candidat.create(name: 'Slash', firstname: 'Saul')
+s=CandidatStatus.new(status: CandidatStatus::TO_MEET)
+s.candidat = c
+s.save
+
+c=Candidat.create(name: 'McKagan', firstname: 'Duff')
+s=CandidatStatus.new(status: CandidatStatus::TO_MEET)
+s.candidat = c
+s.save
+
+c=Candidat.create(name: 'Reed', firstname: 'Dizzy')
 s=CandidatStatus.new(status: CandidatStatus::TO_MEET)
 s.candidat = c
 s.save
