@@ -1,9 +1,13 @@
-import React from 'react'
+import React from 'react';
 import axios from 'axios';
+import actionCable from 'actioncable';
 
 class Board extends React.Component {
     constructor () {
         super();
+        this.CableApp = {};
+        //Will not fit in production
+        this.CableApp.cable = actionCable.createConsumer(`ws://127.0.0.1:3000/cable`);
         this.state = {
             status: []
         };
@@ -12,7 +16,6 @@ class Board extends React.Component {
     fetchStatus() {
         axios.get( '/candidat_status.json' )
         .then(response => {
-            console.log(response);
             this.setState({status: response.data.candidat_status});
         })
         .catch(error => {
@@ -26,7 +29,6 @@ class Board extends React.Component {
             candidat_status: {status: status}
         })
         .then(response => {
-            console.log(response);
         })
         .catch(error => {
         });
@@ -34,6 +36,12 @@ class Board extends React.Component {
 
     componentDidMount () {
         this.fetchStatus();
+        this.CableApp.cable.subscriptions.create({channel: "CandidatStatusChannel" , board: 'board_1'}, {
+            connect: () => { console.log("connect"); },
+            received: (newLine) => {
+                console.log(newLine)
+            }
+        })
     }
 
     render () {
