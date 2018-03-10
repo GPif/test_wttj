@@ -3,5 +3,5 @@ Rails.application.routes.draw do
 
   root to: "pages#home"
 
-  resources :candidat_status, only: [:index]
+  resources :candidat_status, only: [:index, :update]
 end
