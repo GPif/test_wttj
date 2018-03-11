@@ -22,7 +22,8 @@ class BoardElt extends React.Component {
         if (this.state.status) {
             return (
                 <li key={status.id} draggable='true'  onDragStart={this.onDragEvt} status_id={status.id} >
-                    {status.name} {status.firstname}
+                    <span className='circle'></span>
+                    <h3>{status.name} {status.firstname}</h3>
                 </li>
             )
         }
