@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import actionCable from 'actioncable';
+import BoardElt from './boardElt';
 
 class Board extends React.Component {
     constructor () {
@@ -78,38 +79,32 @@ class Board extends React.Component {
         ev.dataTransfer.setData("status_id", id);
     }
 
-    genLi(status) {
-        return (
-            <li key={status.id} draggable='true'  onDragStart={this.drag} status_id={status.id} >
-                {status.name} {status.firstname} {status.status}
-                <button onClick={this.updateStatus.bind(this, status.id, 1)}>A Voir</button>
-                <button onClick={this.updateStatus.bind(this, status.id, 2)}>Entretiens</button>
-            </li>
-        )
-    }
-
     allowDrop(ev) {
         ev.preventDefault();
     }
 
-    drop(ev) {
+    dropToMeet(ev) {
         ev.preventDefault();
         const id = Number(ev.dataTransfer.getData("status_id"));
-        if (ev.target.id === "to_meet" ) {
-            this.updateStatus(id, 1);
-        } else if (ev.target.id === "meeting" ) {
-            this.updateStatus(id, 2);
-        }
+        this.updateStatus(id, 1);
+    }
+
+    dropMeet(ev) {
+        ev.preventDefault();
+        const id = Number(ev.dataTransfer.getData("status_id"));
+        this.updateStatus(id, 2);
     }
 
     render () {
-        const li_tm = this.state.status_to_meet.map((x)=> { return this.genLi(x) });
-        const li_me = this.state.status_meeting.map((x)=> { return this.genLi(x) });
+        const li_tm = this.state.status_to_meet.map((x)=> { return <BoardElt key={x.id} status={x} onDragEvt={this.drag}/> });
+        const li_me = this.state.status_meeting.map((x)=> { return <BoardElt key={x.id} status={x} onDragEvt={this.drag}/> });
         return <div id="board">
-            <div className="to_meet" id="to_meet" onDrop={this.drop.bind(this)} onDragOver={this.allowDrop}>
+            <div className="to_meet" id="to_meet" onDrop={this.dropToMeet.bind(this)} onDragOver={this.allowDrop}>
+                <h1>A rencontrer ({this.state.status_to_meet.length})</h1>
                 <ul>{li_tm}</ul>
             </div>
-            <div className="meeting" id="meeting" onDrop={this.drop.bind(this)} onDragOver={this.allowDrop}>
+            <div className="meeting" id="meeting" onDrop={this.dropMeet.bind(this)} onDragOver={this.allowDrop}>
+                <h1>Entretien ({this.state.status_meeting.length})</h1>
                 <ul>{li_me}</ul>
             </div>
         </div>;
